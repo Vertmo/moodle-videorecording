@@ -61,7 +61,10 @@ if ($wrtcvr->intro) {
 }
 
 // Replace the following lines with you own code.
-echo $OUTPUT->heading('Yay! It works!');
+echo $OUTPUT->heading(get_string('modulename', 'wrtcvr'));
+
+echo file_get_contents(dirname(__FILE__).'/assets/index.html');
+
 
 // Finish the page.
 echo $OUTPUT->footer();

@@ -24,6 +24,7 @@ class mod_wrtcvr_mod_form extends moodleform_mod {
 
     /**
      * Defines forms elements
+     * @todo completer le formulaire pour plus de reglages
      */
     public function definition() {
         global $CFG;
@@ -53,7 +54,7 @@ class mod_wrtcvr_mod_form extends moodleform_mod {
 
         // Adding the rest of wrtcvr settings, spreading all them into this fieldset
         // ... or adding more fieldsets ('header' elements) if needed for better logic.
-        
+
 
         // Add standard grading elements.
         $this->standard_grading_coursemodule_elements();
