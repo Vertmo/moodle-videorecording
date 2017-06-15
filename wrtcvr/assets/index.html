@@ -8,15 +8,21 @@
 <script>
     var webrtcwindow = document.getElementById("webrtcwindow");
 
+    var video = document.createElement("VIDEO");
+    webrtcwindow.appendChild(video);
+
+    var linebreak = document.createElement("br");
+    webrtcwindow.appendChild(linebreak);
+
     var btnStart = document.createElement("BUTTON");
     var t = document.createTextNode("START RECORDING");
     btnStart.appendChild(t);
-    document.body.appendChild(btnStart);
+    webrtcwindow.appendChild(btnStart);
 
     var btnStop = document.createElement("BUTTON");
     var t = document.createTextNode("STOP RECORDING");
     btnStop.appendChild(t);
-    document.body.appendChild(btnStop);
+    webrtcwindow.appendChild(btnStop);
 
     var recordRTC;
 
@@ -41,8 +47,14 @@
     }
 
     btnStop.onclick = function() {
-        recordRTC.stopRecording();
-    }
+        recordRTC.stopRecording(function(audioVideoWebMURL) {
+            window.alert(audioVideoWebMURL);
+            video.src = audioVideoWebMURL;
+            var blobs = recordRTC.getBlob();
+            window.alert(blobs);
+            recordRTC.getDataURL(function(dataURL){});
+        });
+    };
     /*var fileType = 'video'; // or "audio"
     var fileName = 'ABCDEF.webm';  // or "wav"
 
