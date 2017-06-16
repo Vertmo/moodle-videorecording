@@ -1,2 +1,5 @@
 #Archive for plugin installation#
 *.zip
+
+#Recorded media files#
+*.webm
