@@ -24,7 +24,7 @@
         video.src = window.URL.createObjectURL(stream);
         video.play();
         var options = {
-          mimeType: 'video', // or video/webm\;codecs=h264 or video/webm\;codecs=vp9
+          mimeType: 'video/webm\;codecs=h264', // or video/webm\;codecs=h264 or video/webm\;codecs=vp9
           video: {
             width: 1280,
             height: 720
@@ -40,7 +40,7 @@
     }
 
     btnStart.onclick = function() {
-        var mediaConstraints = { video: false, audio: true};
+        var mediaConstraints = { video: true, audio: true};
         navigator.mediaDevices.getUserMedia(mediaConstraints).then(successCallback).catch(errorCallback);
     }
 
@@ -52,9 +52,10 @@
     };
 
     btnSave.onclick = function() {
+        if(recordRTC.state === 'recording') return;
         var blob = recordRTC.getBlob();
+
         var fileType = 'video'; // or "audio"
-        var fileName = 'ABCDEF.webm';  // or "wav"
 
         var formData = new FormData();
         formData.append(fileType + '-filename', fileName);

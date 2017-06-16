@@ -25,9 +25,13 @@ class mod_wrtcvr_submission_form extends moodleform {
      * Define this form - called by the parent constructor
      */
     public function definition() {
-        global $USER;
+        //global $USER;
         $mform = $this->_form;
-        list($wrtcvr, $data) = $this->_customdata;
+        $mform->addElement('text', 'file_url', get_string('url'));
+        $mform->setType('file_url', PARAM_RAW);
+
+        //$mform->addElement('filepicker', 'video', get_string('file'), null, array('maxbyte'=>8000, 'accepted_types'=>'*'));
+        /*list($wrtcvr, $data) = $this->_customdata;
         $instance = $wrtcvr->get_instance();
         if ($instance->teamsubmission) {
             $submission = $wrtcvr->get_group_submission($data->userid, 0, true);
@@ -43,6 +47,13 @@ class mod_wrtcvr_submission_form extends moodleform {
         $this->add_action_buttons(true, get_string('savechanges', 'wrtcvr'));
         if ($data) {
             $this->set_data($data);
-        }
+        }*/
+
+        $this->add_action_buttons(/*$cancel=true, $submitlabel = get_string('submitlabel', 'mod_wrtcvr')*/);
+    }
+
+    function  validation($data, $files) {
+        $errors = array();
+        return $errors;
     }
 }

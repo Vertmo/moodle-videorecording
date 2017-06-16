@@ -24,22 +24,30 @@ if ($id) {
     $course     = $DB->get_record('course', array('id' => $wrtcvr->course), '*', MUST_EXIST);
     $cm         = get_coursemodule_from_instance('wrtcvr', $wrtcvr->id, $course->id, false, MUST_EXIST);
 } else {
-    error('You must specify a course_module ID or an instance ID');
+    $old_url = $_SERVER['HTTP_REFERER'];
+    $matches = array();
+    echo preg_match('/id=\d+/', $old_url, $matches);
+    //echo $matches[0];
+
+    $id = substr($matches[0], 3);
+    $cm         = get_coursemodule_from_id('wrtcvr', $id, 0, false, MUST_EXIST);
+    $course     = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
+    $wrtcvr  = $DB->get_record('wrtcvr', array('id' => $cm->instance), '*', MUST_EXIST);
 }
 
 require_login($course, true, $cm);
 
-$event = \mod_wrtcvr\event\course_module_viewed::create(array(
+/*$event = \mod_wrtcvr\event\course_module_viewed::create(array(
     'objectid' => $PAGE->cm->instance,
     'context' => $PAGE->context,
 ));
 $event->add_record_snapshot('course', $PAGE->course);
 $event->add_record_snapshot($PAGE->cm->modname, $wrtcvr);
-$event->trigger();
+$event->trigger();*/
 
 // Print the page header.
 
-$PAGE->set_url('/mod/wrtcvr/view.php', array('id' => $cm->id));
+$PAGE->set_url('/mod/wrtcvr/view.php'/*, array('id' => $cm->id)*/);
 $PAGE->set_title(format_string($wrtcvr->name));
 $PAGE->set_heading(format_string($course->fullname));
 
@@ -61,8 +69,15 @@ if ($wrtcvr->intro) {
 // Replace the following lines with you own code.
 echo $OUTPUT->heading(get_string('modulename', 'wrtcvr'));
 
+$date = new DateTime();
+$timestamp = $date->getTimestamp();
+global $USER;
+$userid = $USER->id;
+$file_url = $timestamp.'_'.$userid.'.mp4';
+echo '<script>fileName="'.$file_url.'"</script>';
 echo file_get_contents(dirname(__FILE__).'/assets/index.html');
 
+require_once(dirname(__FILE__).'/submission.php');
 
 // Finish the page.
 echo $OUTPUT->footer();

@@ -11,6 +11,7 @@
          echo 'uploads/';
 
          $fileName = $_POST["${type}-filename"];
+         //$fileName = $USER->id;
          $uploadDirectory = 'uploads/'.$fileName;
 
          if (!move_uploaded_file($_FILES["${type}-blob"]["tmp_name"], $uploadDirectory)) {
@@ -20,9 +21,4 @@
          echo($fileName);
      }
  }
-
- if(file_exists($uploadDirectory)) {
-     echo "cool";
- }
- 
  ?>
