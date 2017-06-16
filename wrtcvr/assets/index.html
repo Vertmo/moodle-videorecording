@@ -1,5 +1,9 @@
 <div id="webrtcwindow">
     <p>Voyons si ça marche</p>
+    <video id="video" width="320" height="240" controls>Your browser doesn't support video</video>
+    <br/>
+    <button id="btnStart" type="button">START RECORDING</button>
+    <button id="btnStop" type="button">STOP RECORDING</button>
 </div>
 
 <script src="https://cdn.WebRTC-Experiment.com/RecordRTC.js"></script>
@@ -7,28 +11,15 @@
 
 <script>
     var webrtcwindow = document.getElementById("webrtcwindow");
-
-    var video = document.createElement("VIDEO");
-    webrtcwindow.appendChild(video);
-
-    var linebreak = document.createElement("br");
-    webrtcwindow.appendChild(linebreak);
-
-    var btnStart = document.createElement("BUTTON");
-    var t = document.createTextNode("START RECORDING");
-    btnStart.appendChild(t);
-    webrtcwindow.appendChild(btnStart);
-
-    var btnStop = document.createElement("BUTTON");
-    var t = document.createTextNode("STOP RECORDING");
-    btnStop.appendChild(t);
-    webrtcwindow.appendChild(btnStop);
+    var video = document.getElementById("video");
+    var btnStart = document.getElementById("btnStart");
+    var btnStop = document.getElementById("btnStop");
 
     var recordRTC;
 
     function successCallback(stream) {
         var options = {
-          mimeType: 'video/webm', // or video/webm\;codecs=h264 or video/webm\;codecs=vp9
+          mimeType: 'video', // or video/webm\;codecs=h264 or video/webm\;codecs=vp9
           audioBitsPerSecond: 128000,
           videoBitsPerSecond: 128000,
           bitsPerSecond: 128000 // if this line is provided, skip above two
@@ -47,33 +38,32 @@
     }
 
     btnStop.onclick = function() {
-        recordRTC.stopRecording(function(audioVideoWebMURL) {
-            window.alert(audioVideoWebMURL);
-            video.src = audioVideoWebMURL;
-            var blobs = recordRTC.getBlob();
-            window.alert(blobs);
-            recordRTC.getDataURL(function(dataURL){});
+        recordRTC.stopRecording(function(videoURL) {
+            video.src = videoURL;
+            var blob = recordRTC.getBlob();
+            //recordRTC.getDataURL(function(dataURL){});
+
+            var fileType = 'video'; // or "audio"
+            var fileName = 'ABCDEF.webm';  // or "wav"
+
+            var formData = new FormData();
+            formData.append(fileType + '-filename', fileName);
+            formData.append(fileType + '-blob', blob);
+
+            function xhr(url, data, callback) {
+                var request = new XMLHttpRequest();
+                request.onreadystatechange = function () {
+                    if (request.readyState == 4 && request.status == 200) {
+                        callback(location.href + request.responseText);
+                    }
+                };
+                request.open('POST', url);
+                request.send(data);
+            }
+
+            xhr('save.php', formData, function (fName) {
+                window.open(location.href + fName);
+            });
         });
     };
-    /*var fileType = 'video'; // or "audio"
-    var fileName = 'ABCDEF.webm';  // or "wav"
-
-    var formData = new FormData();
-    formData.append(fileType + '-filename', fileName);
-    formData.append(fileType + '-blob', blob);
-
-    xhr('save.php', formData, function (fName) {
-        window.open(location.href + fName);
-    });
-
-    function xhr(url, data, callback) {
-        var request = new XMLHttpRequest();
-        request.onreadystatechange = function () {
-            if (request.readyState == 4 && request.status == 200) {
-                callback(location.href + request.responseText);
-            }
-        };
-        request.open('POST', url);
-        request.send(data);
-    }*/
 </script>
