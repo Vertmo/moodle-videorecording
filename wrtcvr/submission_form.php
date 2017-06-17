@@ -16,8 +16,7 @@ require_once($CFG->dirroot . '/mod/wrtcvr/locallib.php');
  * wrtcvr submission form
  *
  * @package   mod_wrtcvr
- * @copyright 2012 NetSpot {@link http://www.netspot.com.au}
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright 2017 UPMC
  */
 class mod_wrtcvr_submission_form extends moodleform {
 
@@ -27,7 +26,10 @@ class mod_wrtcvr_submission_form extends moodleform {
     public function definition() {
         //global $USER;
         $mform = $this->_form;
-        $mform->addElement('text', 'file_url', get_string('url'));
+
+        $mform->addElement('header', 'general', get_string('submitvideo', 'mod_wrtcvr'));
+
+        $mform->addElement('hidden', 'file_url', get_string('url'));
         $mform->setType('file_url', PARAM_RAW);
 
         //$mform->addElement('filepicker', 'video', get_string('file'), null, array('maxbyte'=>8000, 'accepted_types'=>'*'));
@@ -49,11 +51,16 @@ class mod_wrtcvr_submission_form extends moodleform {
             $this->set_data($data);
         }*/
 
-        $this->add_action_buttons(/*$cancel=true, $submitlabel = get_string('submitlabel', 'mod_wrtcvr')*/);
+        $this->add_action_buttons();
     }
 
-    function  validation($data, $files) {
+    function validation($data, $files) {
         $errors = array();
+        global $CFG;
+        clearstatcache();
+        if(!file_exists($CFG->dirroot.'/mod/wrtcvr/uploads/'.$data['file_url'])) {
+            $errors['file_url'] = get_string('errornofilesubmitted', 'mod_wrtcvr');
+        }
         return $errors;
     }
 }

@@ -2,9 +2,6 @@
 /**
  * Prints a particular instance of wrtcvr
  *
- * You can have a rather longer description of the file as well,
- * if you like, and it can span multiple lines.
- *
  * @package    mod_wrtcvr
  * @copyright  2017 UPMC
  */
@@ -16,6 +13,8 @@ $id = optional_param('id', 0, PARAM_INT); // Course_module ID, or
 $n  = optional_param('n', 0, PARAM_INT);  // ... wrtcvr instance ID - it should be named as the first character of the module.
 
 if ($id) {
+    session_start();
+    $_SESSION['wrtcvr_currentcourseid'] = $id;
     $cm         = get_coursemodule_from_id('wrtcvr', $id, 0, false, MUST_EXIST);
     $course     = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
     $wrtcvr  = $DB->get_record('wrtcvr', array('id' => $cm->instance), '*', MUST_EXIST);
@@ -24,12 +23,7 @@ if ($id) {
     $course     = $DB->get_record('course', array('id' => $wrtcvr->course), '*', MUST_EXIST);
     $cm         = get_coursemodule_from_instance('wrtcvr', $wrtcvr->id, $course->id, false, MUST_EXIST);
 } else {
-    $old_url = $_SERVER['HTTP_REFERER'];
-    $matches = array();
-    echo preg_match('/id=\d+/', $old_url, $matches);
-    //echo $matches[0];
-
-    $id = substr($matches[0], 3);
+    $id = $_SESSION['wrtcvr_currentcourseid'];
     $cm         = get_coursemodule_from_id('wrtcvr', $id, 0, false, MUST_EXIST);
     $course     = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
     $wrtcvr  = $DB->get_record('wrtcvr', array('id' => $cm->instance), '*', MUST_EXIST);
@@ -46,17 +40,9 @@ $event->add_record_snapshot($PAGE->cm->modname, $wrtcvr);
 $event->trigger();*/
 
 // Print the page header.
-
-$PAGE->set_url('/mod/wrtcvr/view.php'/*, array('id' => $cm->id)*/);
+$PAGE->set_url('/mod/wrtcvr/view.php', array('id' => $cm->id));
 $PAGE->set_title(format_string($wrtcvr->name));
 $PAGE->set_heading(format_string($course->fullname));
-
-/*
- * Other things you may want to set - remove if not needed.
- * $PAGE->set_cacheable(false);
- * $PAGE->set_focuscontrol('some-html-id');
- * $PAGE->add_body_class('wrtcvr-'.$somevar);
- */
 
 // Output starts here.
 echo $OUTPUT->header();

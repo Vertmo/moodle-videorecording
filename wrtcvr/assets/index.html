@@ -1,5 +1,4 @@
 <div id="webrtcwindow">
-    <p>Voyons si ça marche</p>
     <video id="video" width="640" height="360" controls>Your browser doesn't support video</video>
     <br/>
     <button id="btnStart" type="button">START RECORDING</button>
@@ -47,7 +46,6 @@
     btnStop.onclick = function() {
         recordRTC.stopRecording(function(videoURL) {
             video.src = videoURL;
-            //recordRTC.getDataURL(function(dataURL){});
         });
     };
 
@@ -62,7 +60,8 @@
         formData.append(fileType + '-blob', blob);
 
         xhr('save.php', formData, function (fName) {
-            window.alert(fName);
+            //window.alert(fName);
+            window.alert("Vidéo uploadé !");
         });
 
         function xhr(url, data, callback) {

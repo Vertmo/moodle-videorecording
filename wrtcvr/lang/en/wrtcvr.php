@@ -22,4 +22,5 @@ $string['wrtcvrname_help'] = 'This is the content of the help tooltip associated
 $string['wrtcvr'] = 'wrtcvr';
 $string['pluginadministration'] = 'Video Recording administration';
 $string['pluginname'] = 'Video Recording';
-$string['submitlabel'] = 'Submit the video';
+$string['submitvideo'] = 'Submit the video';
+$string['errornofilesubmitted'] = 'You did not upload any video !';
