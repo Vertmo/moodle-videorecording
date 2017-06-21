@@ -32,25 +32,6 @@ class mod_wrtcvr_submission_form extends moodleform {
         $mform->addElement('hidden', 'file_url', get_string('url'));
         $mform->setType('file_url', PARAM_RAW);
 
-        //$mform->addElement('filepicker', 'video', get_string('file'), null, array('maxbyte'=>8000, 'accepted_types'=>'*'));
-        /*list($wrtcvr, $data) = $this->_customdata;
-        $instance = $wrtcvr->get_instance();
-        if ($instance->teamsubmission) {
-            $submission = $wrtcvr->get_group_submission($data->userid, 0, true);
-        } else {
-            $submission = $wrtcvr->get_user_submission($data->userid, true);
-        }
-        if ($submission) {
-            $mform->addElement('hidden', 'lastmodified', $submission->timemodified);
-            $mform->setType('lastmodified', PARAM_INT);
-        }
-
-        $wrtcvr->add_submission_form_elements($mform, $data);
-        $this->add_action_buttons(true, get_string('savechanges', 'wrtcvr'));
-        if ($data) {
-            $this->set_data($data);
-        }*/
-
         $this->add_action_buttons();
     }
 

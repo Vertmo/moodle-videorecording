@@ -3,7 +3,6 @@
     <br/>
     <button id="btnStart" type="button">START RECORDING</button>
     <button id="btnStop" type="button">STOP RECORDING</button>
-    <button id="btnSave" type="button">SAVE RECORDING</button>
 </div>
 
 <script src="https://cdn.WebRTC-Experiment.com/RecordRTC.js"></script>
@@ -15,9 +14,13 @@
 
     var btnStart = document.getElementById("btnStart");
     var btnStop = document.getElementById("btnStop");
-    var btnSave = document.getElementById("btnSave");
 
     var recordRTC;
+
+    /*window.onbeforeunload = function(e) {
+        window.alert("Ahhhhhhhhh");
+        return "Ahhhhhhhh";
+    }*/
 
     function successCallback(stream) {
         video.src = window.URL.createObjectURL(stream);
@@ -25,8 +28,8 @@
         var options = {
           mimeType: 'video/webm\;codecs=h264', // or video/webm\;codecs=h264 or video/webm\;codecs=vp9
           video: {
-            width: 1280,
-            height: 720
+            width: 640,
+            height: 360
           },
           //bitsPerSecond: 128000 // if this line is provided, skip above two
         };
@@ -39,40 +42,42 @@
     }
 
     btnStart.onclick = function() {
-        var mediaConstraints = { video: true, audio: true};
+        var mediaConstraints = {
+            audio: true,
+            video: {
+                width: {exact: 640},
+                height: {exact: 360}
+            }
+        };
         navigator.mediaDevices.getUserMedia(mediaConstraints).then(successCallback).catch(errorCallback);
     }
 
     btnStop.onclick = function() {
         recordRTC.stopRecording(function(videoURL) {
             video.src = videoURL;
+            var blob = recordRTC.getBlob();
+
+            var fileType = 'video';
+
+            var formData = new FormData();
+            formData.append(fileType + '-filename', fileName);
+            formData.append(fileType + '-blob', blob);
+
+            xhr('save.php', formData, function (fName) {
+                //window.alert(fName);
+                //window.alert("Vidéo uploadé !");
+            });
+
+            function xhr(url, data, callback) {
+                var request = new XMLHttpRequest();
+                request.onreadystatechange = function () {
+                    if (request.readyState == 4 && request.status == 200) {
+                        callback(request.responseText);
+                    }
+                };
+                request.open('POST', url);
+                request.send(data);
+            }
         });
-    };
-
-    btnSave.onclick = function() {
-        if(recordRTC.state === 'recording') return;
-        var blob = recordRTC.getBlob();
-
-        var fileType = 'video'; // or "audio"
-
-        var formData = new FormData();
-        formData.append(fileType + '-filename', fileName);
-        formData.append(fileType + '-blob', blob);
-
-        xhr('save.php', formData, function (fName) {
-            //window.alert(fName);
-            window.alert("Vidéo uploadé !");
-        });
-
-        function xhr(url, data, callback) {
-            var request = new XMLHttpRequest();
-            request.onreadystatechange = function () {
-                if (request.readyState == 4 && request.status == 200) {
-                    callback(request.responseText);
-                }
-            };
-            request.open('POST', url);
-            request.send(data);
-        }
     };
 </script>

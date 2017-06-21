@@ -364,9 +364,13 @@ function wrtcvr_update_grades(stdClass $wrtcvr, $userid = 0) {
     global $CFG, $DB;
     require_once($CFG->libdir.'/gradelib.php');
 
+    $record = $DB->get_record('wrtcvr_grades', array('userid'=>$userid, 'assignment'=>$wrtcvr->id));
     // Populate array of grade objects indexed by userid.
     $grades = array();
-
+    $grade = new stdClass();
+    $grade->grade = intval($record->grade);
+    $grade->userid = intval($userid);
+    $grades[intval($userid)] = $grade;
     grade_update('mod/wrtcvr', $wrtcvr->course, 'mod', 'wrtcvr', $wrtcvr->id, 0, $grades);
 }
 
@@ -431,7 +435,20 @@ function wrtcvr_pluginfile($course, $cm, $context, $filearea, array $args, $forc
 
     require_login($course, true, $cm);
 
-    send_file_not_found();
+    $itemid = array_shift($args);
+    $filename = array_pop($args); // The last item in the $args array.
+    if (!$args) {
+        $filepath = '/'; // $args is empty => the path is '/'
+    } else {
+        $filepath = '/'.implode('/', $args).'/'; // $args contains elements of the filepath
+    }
+
+    $fs = get_file_storage();
+    $file = $fs->get_file($context->id, 'mod_wrtcvr', $filearea, $itemid, $filepath, $filename);
+    if(!$file) {
+        return false;
+    }
+    send_stored_file($file, 86400, 0, true);
 }
 
 /* Navigation API */

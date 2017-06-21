@@ -12,8 +12,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_wrtcvr';
-$plugin->version = 2017061800;
-$plugin->release = 'v0.0';
+$plugin->version = 2017062002;
+$plugin->release = 'v0.1';
 $plugin->requires = 2014051200;
 $plugin->maturity = MATURITY_ALPHA;
 $plugin->cron = 0;

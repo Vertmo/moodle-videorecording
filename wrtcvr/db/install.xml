@@ -24,18 +24,17 @@
         <INDEX NAME="course" UNIQUE="false" FIELDS="course"/>
       </INDEXES>
     </TABLE>
-    <TABLE NAME="wrtcvr_submission" COMMENT="Keeps informations about student submissions">
+    <TABLE NAME="wrtcvr_submissions" COMMENT="Keeps informations about student submissions">
         <FIELDS>
             <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
             <FIELD NAME="assignment" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
             <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
-            <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The time of the first student submission to this assignment."/>
-            <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The last time this assignment submission was modified by a student."/>
-            <FIELD NAME="url" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="The url of the stored video"/>
+            <FIELD NAME="fileid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The file itemid of the stored video"/>
         </FIELDS>
         <KEYS>
             <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="The unique id for this wrtcvr submission."/>
             <KEY NAME="assignment" TYPE="foreign" FIELDS="assignment" REFTABLE="wrtcvr" REFFIELDS="id" COMMENT="The instance of mod_wrtcvr this submission belongs to."/>
+            <KEY NAME="fileid" TYPE="foreign" FIELDS="fileid" REFTABLE="files" REFFIELDS="id" COMMENT="The video file included in this submission"/>
         </KEYS>
         <INDEXES>
             <INDEX NAME="userid" UNIQUE="false" FIELDS="userid"/>
