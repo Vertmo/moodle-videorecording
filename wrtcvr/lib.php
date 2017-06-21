@@ -364,14 +364,16 @@ function wrtcvr_update_grades(stdClass $wrtcvr, $userid = 0) {
     global $CFG, $DB;
     require_once($CFG->libdir.'/gradelib.php');
 
-    $record = $DB->get_record('wrtcvr_grades', array('userid'=>$userid, 'assignment'=>$wrtcvr->id));
+    $record = $DB->get_record('wrtcvr_grades', array('userid'=>$userid, 'assignment'=>$wrtcvr->instance));
     // Populate array of grade objects indexed by userid.
     $grades = array();
     $grade = new stdClass();
-    $grade->grade = intval($record->grade);
+    $grade->grade = floatval($record->grade);
     $grade->userid = intval($userid);
     $grades[intval($userid)] = $grade;
-    grade_update('mod/wrtcvr', $wrtcvr->course, 'mod', 'wrtcvr', $wrtcvr->id, 0, $grades);
+    return grade_update('mod/wrtcvr', $wrtcvr->course, 'mod', 'wrtcvr', $wrtcvr->id, 0, $grades);
+
+
 }
 
 /* File API */

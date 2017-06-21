@@ -10,7 +10,7 @@
 
 <script>
     var webrtcwindow = document.getElementById("webrtcwindow");
-    var video = document.getElementById("video");
+    video = document.getElementById("video");
 
     var btnStart = document.getElementById("btnStart");
     var btnStop = document.getElementById("btnStop");
@@ -26,7 +26,9 @@
         video.src = window.URL.createObjectURL(stream);
         video.play();
         var options = {
-          mimeType: 'video/webm\;codecs=h264', // or video/webm\;codecs=h264 or video/webm\;codecs=vp9
+          type: 'video/webm', // or video/webm\;codecs=h264 or video/webm\;codecs=vp9
+          audioBitsPerSecond: 128000,
+          videoBitsPerSecond: 128000,
           video: {
             width: 640,
             height: 360

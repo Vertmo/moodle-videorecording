@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $record->grade = intval($grade);
             $DB->insert_record('wrtcvr_grades', $record);
         }
-        wrtcvr_update_grades($wrtcvr, $userid);
+        wrtcvr_update_grades($cm, $userid);
     }
     global $PAGE;
     $urltogo = new moodle_url('/course/view.php', array('id'=>$PAGE->course->id));
@@ -44,7 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $userids = array_map(function($obj) {return $obj->id;}, $enrolledusers);
     $gradeinfo = grade_get_grades($course->id, 'mod', 'wrtcvr', $wrtcvr->id, $userids);
     $table = new html_table();
-    $table->head = array(get_string('teachertableauthor', 'mod_wrtcvr'), get_string('teachertabledate', 'mod_wrtcvr'), get_string('teachertablewatch', 'mod_wrtcvr'), get_string('teachertablegrade', 'mod_wrtcvr').' (/'.intval($gradeinfo->items[0]->grademax).')');
+    if($gradeinfo->items) $table->head = array(get_string('teachertableauthor', 'mod_wrtcvr'), get_string('teachertabledate', 'mod_wrtcvr'), get_string('teachertablewatch', 'mod_wrtcvr'), get_string('teachertablegrade', 'mod_wrtcvr').' (/'.intval($gradeinfo->items[0]->grademax).')');
+    else $table->head = array(get_string('teachertableauthor', 'mod_wrtcvr'), get_string('teachertabledate', 'mod_wrtcvr'), get_string('teachertablewatch', 'mod_wrtcvr'));
     echo '<form action="#" method="post">';
 
     foreach($enrolledusers as $user) {
@@ -58,16 +59,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $date = date('m/d/Y H:i:s', $file->timemodified);
             $fileurl = moodle_url::make_pluginfile_url($file->contextid, $file->component, $file->filearea, $file->itemid, $file->filepath, $file->filename);
             $button = '<input type="button" class="btn btn-secondary" value="'.get_string('teachertablewatch', 'mod_wrtcvr').'" onclick="setVideoSrc(\''.$fileurl.'\')">';
-            if($currentgrade = $gradeinfo->items[0]->grades[$user->id]->grade) {
-                $grade = '<input type="number" name="grade_'.$user->id.'" value="'.$currentgrade.'" min="0" max="'.intval($gradeinfo->items[0]->grademax).'">';
-            } else {
-                $grade = '<input type="number" name="grade_'.$user->id.'" value="0" min="0" max="'.intval($gradeinfo->items[0]->grademax).'">';
+
+            if($gradeinfo->items) {
+                if($currentgrade = $DB->get_record('wrtcvr_grades', array('assignment'=>$wrtcvr->id, 'userid'=>$user->id))) $grade = '<input type="number" name="grade_'.$user->id.'" value="'.$currentgrade->grade.'" min="0" max="'.intval($gradeinfo->items[0]->grademax).'">';
+                else $grade = '<input type="number" name="grade_'.$user->id.'" value="0" min="0" max="'.intval($gradeinfo->items[0]->grademax).'">';
             }
         }
-        $table->data[] = array($user->firstname.' '.$user->lastname, $date, $button, $grade);
+        if($gradeinfo->items) $table->data[] = array($user->firstname.' '.$user->lastname, $date, $button, $grade);
+        else $table->data[] = array($user->firstname.' '.$user->lastname, $date, $button);
     }
     echo html_writer::table($table);
-    echo '<input id="id_submitbutton" type="submit" class="btn btn-primary" value="Update grades"/>';
+    if($gradeinfo->items) echo '<input id="id_submitbutton" type="submit" class="btn btn-primary" value="Update grades"/>';
     echo '</form>';
 
     //$form->display();

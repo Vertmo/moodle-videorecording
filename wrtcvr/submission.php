@@ -31,13 +31,14 @@ if($form->is_cancelled()) {
         'filename' => $fromform->file_url);
 
     $fileid = $fs->create_file_from_pathname($fileinfo, $filepath.$fromform->file_url)->get_id();
-    unlink($filepath.$fromform->file_url);
 
     $record = new stdClass();
     $record->assignment = $wrtcvr->id;
     $record->userid = $USER->id;
     $record->fileid = $fileid;
     $DB->insert_record('wrtcvr_submissions', $record);
+
+    unlink($filepath.$fromform->file_url);
 
     global $PAGE;
     $urltogo = new moodle_url('/course/view.php', array('id'=>$PAGE->course->id));
