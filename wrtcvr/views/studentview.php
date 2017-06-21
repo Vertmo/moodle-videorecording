@@ -20,8 +20,8 @@ if ($wrtcvr->intro) {
 // Replace the following lines with you own code.
 echo $OUTPUT->heading(get_string('modulename', 'wrtcvr'));
 
-if($previousvideo) echo '<p>'.get_string('alreadysubmittedvideo', 'mod_wrtcvr').date('d.m.y', $wrtcvr->duedate).'</p>';
-else echo '<p>'.get_string('nosubmittedvideo', 'mod_wrtcvr').date('d.m.y', $wrtcvr->duedate).'</p>';
+if($previousvideo) echo '<p class = "alert alert-info alert-block">'.get_string('alreadysubmittedvideo', 'mod_wrtcvr').date('d.m.y', $wrtcvr->duedate).'</p>';
+else echo '<p class = "alert alert-info alert-block">'.get_string('nosubmittedvideo', 'mod_wrtcvr').date('d.m.y', $wrtcvr->duedate).'</p>';
 
 echo '<script>fileName="'.$_SESSION['file_url'].'"</script>';
 echo file_get_contents(dirname(__FILE__).'/index.html');

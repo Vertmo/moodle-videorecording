@@ -32,5 +32,5 @@ $string['teachertabledate'] = 'Last modification date';
 $string['teachertablewatch'] = 'Watch';
 $string['teachertablegrade'] = 'Grade';
 $string['teachertablenosubmittedvideo'] = 'No video yet';
-$string['alreadyuploadedvideo'] = 'You have already uploaded a video, but you can of course modify it until ';
+$string['alreadysubmittedvideo'] = 'You have already uploaded a video, but you can modify it until ';
 $string['nosubmittedvideo'] = 'You have not uploaded any video yet, upload on before ';
