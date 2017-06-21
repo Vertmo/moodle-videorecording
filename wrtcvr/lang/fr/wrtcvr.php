@@ -34,3 +34,5 @@ $string['teachertablegrade'] = 'Note';
 $string['teachertablenosubmittedvideo'] = 'Pas encore de vidéo';
 $string['alreadysubmittedvideo'] = 'Vous avez déjà uploadé une vidéo, mais vous pouvez la modifier jusqu\'au ';
 $string['nosubmittedvideo'] = 'Vous n\'avez pas encore uploadé de vidéo, veuillez le faire avant le ';
+$string['allowsubmissionsfromdate'] = 'Date à laquelle les élèves peuvent commencer à envoyer des vidéos';
+$string['duedate'] = 'Date limite pour envoyer une vidéo';

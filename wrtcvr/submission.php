@@ -27,7 +27,6 @@ if($form->is_cancelled()) {
         $previousvideofile = $DB->get_record('files', array('id'=>$previousvideo->fileid));
 
         $file = $fs->get_file($previousvideofile->contextid, $previousvideofile->component, $previousvideofile->filearea, $previousvideofile->itemid, $previousvideofile->filepath, $previousvideofile->filename);
-        var_dump($file);
         if ($file) {
             $file->delete();
         }
@@ -58,7 +57,7 @@ if($form->is_cancelled()) {
 
     global $PAGE;
     $urltogo = new moodle_url('/course/view.php', array('id'=>$PAGE->course->id));
-    redirect($urltogo, get_string('videohasbeenuploadedbleh', 'mod_wrtcvr'), 10);
+    redirect($urltogo, get_string('videohasbeenuploaded', 'mod_wrtcvr'), 10);
 } else {
     $data = new stdClass();
     $data->file_url = $_SESSION['file_url'];
