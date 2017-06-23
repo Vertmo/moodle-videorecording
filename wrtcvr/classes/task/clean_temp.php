@@ -16,7 +16,15 @@
      }
 
      public function execute() {
-         // Code goes here
+         $uploaddirectory = dirname(dirname(__DIR__)).'/uploads/';
+         if ($handle = opendir($uploaddirectory)) {
+             while (false !== ($entry = readdir($handle))) {
+                 if ($entry != "." && $entry != ".." && $entry != "README.txt") {
+                     if(time()-filemtime($uploaddirectory.$entry) > 60*60*2) unlink($uploaddirectory.$entry);
+                 }
+             }
+             closedir($handle);
+         }
      }
  }
 ?>
