@@ -306,7 +306,7 @@ function wrtcvr_scale_used_anywhere($scaleid) {
  * @param bool $reset reset grades in the gradebook
  * @return void
  */
-function wrtcvr_grade_item_update(stdClass $wrtcvr, $reset=false) {
+function wrtcvr_grade_item_update($wrtcvr, $grades=null) {
     global $CFG;
     require_once($CFG->libdir.'/gradelib.php');
 
@@ -325,12 +325,13 @@ function wrtcvr_grade_item_update(stdClass $wrtcvr, $reset=false) {
         $item['gradetype'] = GRADE_TYPE_NONE;
     }
 
-    if ($reset) {
+    if ($grades === 'reset') {
         $item['reset'] = true;
+        $grades = null;
     }
 
-    grade_update('mod/wrtcvr', $wrtcvr->course, 'mod', 'wrtcvr',
-            $wrtcvr->id, 0, null, $item);
+    return grade_update('mod/wrtcvr', $wrtcvr->course, 'mod', 'wrtcvr',
+            $wrtcvr->id, 0, $grades, $item);
 }
 
 /**
@@ -355,18 +356,18 @@ function wrtcvr_grade_item_delete($wrtcvr) {
  * @param stdClass $wrtcvr instance object with extra cmidnumber and modname property
  * @param int $userid update grade of specific user only, 0 means all participants
  */
-function wrtcvr_update_grades(stdClass $wrtcvr, $userid = 0) {
+function wrtcvr_update_grades($wrtcvr, $userid = 0) {
     global $CFG, $DB;
     require_once($CFG->libdir.'/gradelib.php');
 
-    $record = $DB->get_record('wrtcvr_grades', array('userid'=>$userid, 'assignment'=>$wrtcvr->instance));
+    $record = $DB->get_record('wrtcvr_grades', array('userid'=>$userid, 'assignment'=>$wrtcvr->id));
     // Populate array of grade objects indexed by userid.
     $grades = array();
     $grade = new stdClass();
-    $grade->grade = floatval($record->grade);
+    $grade->rawgrade = floatval($record->grade);
     $grade->userid = intval($userid);
     $grades[intval($userid)] = $grade;
-    return grade_update('mod/wrtcvr', $wrtcvr->course, 'mod', 'wrtcvr', $wrtcvr->id, 0, $grades);
+    return wrtcvr_grade_item_update($wrtcvr, $grades);
 
 
 }

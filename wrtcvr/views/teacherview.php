@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $record->grade = intval($grade);
             $DB->insert_record('wrtcvr_grades', $record);
         }
-        wrtcvr_update_grades($cm, $userid);
+        wrtcvr_update_grades($wrtcvr, $userid);
     }
     global $PAGE;
     $urltogo = new moodle_url('/course/view.php', array('id'=>$PAGE->course->id));
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $button = '<input type="button" class="btn btn-secondary" value="'.get_string('teachertablewatch', 'mod_wrtcvr').'" onclick="setVideoSrc(\''.$fileurl.'\')">';
 
             if($gradeinfo->items) {
-                if($currentgrade = $DB->get_record('wrtcvr_grades', array('assignment'=>$wrtcvr->id, 'userid'=>$user->id))) $grade = '<input type="number" name="grade_'.$user->id.'" value="'.$currentgrade->grade.'" min="0" max="'.intval($gradeinfo->items[0]->grademax).'">';
+                if($currentgrade = $gradeinfo->items[0]->grades[$user->id]->grade) $grade = '<input type="number" name="grade_'.$user->id.'" value="'.$currentgrade.'" min="0" max="'.intval($gradeinfo->items[0]->grademax).'">';
                 else $grade = '<input type="number" name="grade_'.$user->id.'" value="0" min="0" max="'.intval($gradeinfo->items[0]->grademax).'">';
             }
         }
