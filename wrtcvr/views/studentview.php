@@ -6,6 +6,12 @@
  * @copyright  2017 UPMC
  */
 
+ if($wrtcvr->allowsubmissionsfromdate > time()) {
+     global $PAGE;
+     $urltogo = new moodle_url('/course/view.php', array('id'=>$PAGE->course->id));
+     redirect($urltogo, get_string('toearlytosubmit', 'mod_wrtcvr').date('d.m.y', $wrtcvr->duedate), 10);
+ }
+
 $previousvideo = $DB->get_record('wrtcvr_submissions', array('assignment'=>$wrtcvr->id, 'userid'=>$USER->id));
 require_once(dirname(dirname(__FILE__)).'/submission.php');
 
@@ -21,7 +27,12 @@ if ($wrtcvr->intro) {
 echo $OUTPUT->heading(get_string('modulename', 'wrtcvr'));
 
 if($previousvideo) echo '<p class = "alert alert-info alert-block">'.get_string('alreadysubmittedvideo', 'mod_wrtcvr').date('d.m.y', $wrtcvr->duedate).'</p>';
-else echo '<p class = "alert alert-info alert-block">'.get_string('nosubmittedvideo', 'mod_wrtcvr').date('d.m.y', $wrtcvr->duedate).'</p>';
+else {
+    if($wrtcvr->duedate > time()) {
+        echo '<p class = "alert alert-info alert-block">'.get_string('nosubmittedvideo', 'mod_wrtcvr').date('d.m.y', $wrtcvr->duedate).'</p>';
+    }
+    else echo '<p class = "alert alert-danger alert-block">'.get_string('latetosubmitvideo', 'mod_wrtcvr').date('d.m.y', $wrtcvr->duedate).'</p>';
+}
 
 echo '<script>fileName="'.$_SESSION['file_url'].'"</script>';
 echo file_get_contents(dirname(__FILE__).'/index.html');
