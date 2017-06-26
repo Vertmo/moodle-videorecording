@@ -40,7 +40,7 @@
             <INDEX NAME="userid" UNIQUE="false" FIELDS="userid"/>
         </INDEXES>
     </TABLE>
-    <TABLE NAME="wrtcvr_grades" COMMENT="Grading information about a single assignment submission.">
+    <TABLE NAME="wrtcvr_grades" COMMENT="Grading information about a single wrtcvr submission.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="assignment" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
