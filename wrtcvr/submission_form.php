@@ -24,7 +24,6 @@ class mod_wrtcvr_submission_form extends moodleform {
      * Define this form - called by the parent constructor
      */
     public function definition() {
-        //global $USER;
         $mform = $this->_form;
 
         $mform->addElement('header', 'general', get_string('submitvideo', 'mod_wrtcvr'));
@@ -39,7 +38,7 @@ class mod_wrtcvr_submission_form extends moodleform {
         $errors = array();
         global $CFG;
         clearstatcache();
-        if(!file_exists($CFG->dirroot.'/mod/wrtcvr/uploads/'.$data['file_url'])) {
+        if(!file_exists($CFG->tempdir.'/'.$data['file_url'])) {
             $errors['file_url'] = get_string('errornofilesubmitted', 'mod_wrtcvr');
         }
         return $errors;

@@ -1,12 +1,16 @@
 <?php
-
+/**
+ * Code to allow a student to submit his video
+ *
+ * @package   mod_wrtcvr
+ * @copyright 2017 UPMC
+ */
 require_once(dirname(__FILE__).'/submission_form.php');
 
 $form = new mod_wrtcvr_submission_form();
 
 if($form->is_cancelled()) {
     $data = $form->get_data();
-    $file = $CFG->dirroot.'/mod/wrtcvr/uploads/'.$_SESSION['file_url'];
     if(file_exists($file)) {
         unlink($file);
     }
@@ -18,7 +22,7 @@ if($form->is_cancelled()) {
     global $DB;
     global $USER;
 
-    $filepath = $CFG->dirroot.'/mod/wrtcvr/uploads/';
+    $filepath = $CFG->tempdir.'/';
 
     $fs = get_file_storage();
 

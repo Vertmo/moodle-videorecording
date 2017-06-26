@@ -23,7 +23,6 @@ if ($wrtcvr->intro) {
     echo $OUTPUT->box(format_module_intro('wrtcvr', $wrtcvr, $cm->id), 'generalbox mod_introbox', 'wrtcvrintro');
 }
 
-// Replace the following lines with you own code.
 echo $OUTPUT->heading(get_string('modulename', 'wrtcvr'));
 
 if($previousvideo) echo '<p class = "alert alert-info alert-block">'.get_string('alreadysubmittedvideo', 'mod_wrtcvr').date('d.m.y', $wrtcvr->duedate).'</p>';

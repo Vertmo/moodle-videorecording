@@ -72,8 +72,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if($gradeinfo->items) echo '<input id="id_submitbutton" type="submit" class="btn btn-primary" value="Update grades"/>';
     echo '</form>';
 
-    //$form->display();
-
     echo $OUTPUT->footer();
 }
 ?>
