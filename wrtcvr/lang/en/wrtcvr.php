@@ -23,6 +23,7 @@ $string['wrtcvr'] = 'wrtcvr';
 $string['pluginadministration'] = 'Video Recording administration';
 $string['pluginname'] = 'Video Recording';
 $string['submitvideo'] = 'Submit the video';
+$string['updategrades'] = 'Update Grades';
 $string['errornofilesubmitted'] = 'You did not upload any video !';
 $string['videohasbeenuploaded'] = 'The video has successfully been uploaded !';
 $string['gradeshavebeenupdated'] = 'The grades have been updated';
