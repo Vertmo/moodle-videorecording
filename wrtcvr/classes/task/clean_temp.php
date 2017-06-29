@@ -18,10 +18,11 @@
      }
 
      public function execute() {
+         global $CFG;
          $uploaddirectory = $CFG->tempdir;
          if ($handle = opendir($uploaddirectory)) {
              while (false !== ($entry = readdir($handle))) {
-                 if (preg_match('/\d+_\d+\.mp4/', $entry)) {
+                 if (preg_match('/\d+_\d+\.webm/', $entry)) {
                      if(time()-filemtime($uploaddirectory.'/'.$entry) > 60*60*2) unlink($uploaddirectory.'/'.$entry);
                  }
              }
