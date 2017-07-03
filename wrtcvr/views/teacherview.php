@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         else $table->data[] = array($user->firstname.' '.$user->lastname, $date, $button);
     }
     echo html_writer::table($table);
-    if($gradeinfo->items) echo '<input id="id_submitbutton" type="submit" class="btn btn-primary" value=".'get_string('updategrades', 'mod_wrtcvr')'."/>';
+    if($gradeinfo->items) echo '<input id="id_submitbutton" type="submit" class="btn btn-primary" value="'.get_string('updategrades', 'mod_wrtcvr').'"/>';
     echo '</form>';
 
     echo $OUTPUT->footer();
