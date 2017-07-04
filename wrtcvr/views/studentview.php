@@ -11,7 +11,7 @@
  if($wrtcvr->allowsubmissionsfromdate > time()) {
      global $PAGE;
      $urltogo = new moodle_url('/course/view.php', array('id'=>$PAGE->course->id));
-     redirect($urltogo, get_string('toearlytosubmit', 'mod_wrtcvr').date('d.m.y', $wrtcvr->duedate), 10);
+     redirect($urltogo, get_string('toearlytosubmit', 'mod_wrtcvr').date('d.m.y H:i', $wrtcvr->duedate), 10);
  }
 
 $previousvideo = $DB->get_record('wrtcvr_submissions', array('assignment'=>$wrtcvr->id, 'userid'=>$USER->id));
@@ -20,33 +20,29 @@ require_once(dirname(dirname(__FILE__)).'/submission.php');
 // Output starts here.
 echo $OUTPUT->header();
 
-echo '<link rel="stylesheet" type="text/css" href="style.css">';
-
 // Conditions to show the intro can change to look for own settings or whatever.
-if ($wrtcvr->intro) {
-    echo $OUTPUT->box(format_module_intro('wrtcvr', $wrtcvr, $cm->id), 'generalbox mod_introbox', 'wrtcvrintro');
-}
+if ($wrtcvr->intro) echo $OUTPUT->box(format_module_intro('wrtcvr', $wrtcvr, $cm->id), 'generalbox mod_introbox', 'wrtcvrintro');
 
 echo $OUTPUT->heading(get_string('modulename', 'wrtcvr'));
 
 if($previousvideo) {
     $previousvideofile = $DB->get_record('files', array('id'=>$previousvideo->fileid));
     $previousvideofileurl = moodle_url::make_pluginfile_url($previousvideofile->contextid, $previousvideofile->component, $previousvideofile->filearea, $previousvideofile->itemid, $previousvideofile->filepath, $previousvideofile->filename);
-    echo '<p class = "alert alert-info alert-block">'.get_string('alreadysubmittedvideo', 'mod_wrtcvr').date('d.m.y', $wrtcvr->duedate).'</p>';
-    echo '<a class="btn btn-secondary" href="'.$previousvideofileurl.'">'.get_string('download_previous', 'mod_wrtcvr').'</a>';
+    if($wrtcvr->duedate > time()) echo '<p class = "alert alert-success alert-block">'.get_string('alreadysubmittedvideo', 'mod_wrtcvr').date('d.m.y H:i', $wrtcvr->duedate).'</p>';
+    else echo '<p class = "alert alert-success alert-block">'.get_string('aftersubmittedvideo', 'mod_wrtcvr').'</p>';
+    echo '<a class="btn btn-secondary" href="'.$previousvideofileurl.'">'.get_string('download_previous', 'mod_wrtcvr').'</a><br/>';
 }
 else {
-    if($wrtcvr->duedate > time()) {
-        echo '<p class = "alert alert-info alert-block">'.get_string('nosubmittedvideo', 'mod_wrtcvr').date('d.m.y', $wrtcvr->duedate).'</p>';
-    }
-    else echo '<p class = "alert alert-danger alert-block">'.get_string('latetosubmitvideo', 'mod_wrtcvr').date('d.m.y', $wrtcvr->duedate).'</p>';
+    if($wrtcvr->duedate > time()) echo '<p class = "alert alert-info alert-block">'.get_string('nosubmittedvideo', 'mod_wrtcvr').date('d.m.y H:i', $wrtcvr->duedate).'</p>';
+    else echo '<p class = "alert alert-danger alert-block">'.get_string('latetosubmitvideo', 'mod_wrtcvr').date('d.m.y H:i', $wrtcvr->duedate).'</p>';
 }
 
 echo '<script>fileName="'.$_SESSION['file_url'].'"</script>';
-echo '<br/><br/>';
+echo '<br/>';
 
 if($wrtcvr->withvideo) echo '<h3>'.get_string('audioandvideo', 'mod_wrtcvr').'</h3>';
 else echo '<h3>'.get_string('audioonly', 'mod_wrtcvr').'</h3>';
+echo '<br/>';
 ?>
 
 <div id="webrtcwindow">
@@ -55,8 +51,12 @@ else echo '<h3>'.get_string('audioonly', 'mod_wrtcvr').'</h3>';
         else echo '<audio id="video" controls>Votre navigateur ne supporte pas la video</audio>';
     ?>
     <br/>
-    <button id="btnStart" class="btn btn-secondary" type="button">START RECORDING</button>
-    <button id="btnStop" class="btn btn-secondary" type="button">STOP RECORDING</button>
+    <?php
+    if($wrtcvr->duedate > time()) {
+        echo '<button id="btnStart" class="btn btn-secondary" type="button">START RECORDING</button>';
+        echo '<button id="btnStop" class="btn btn-secondary" type="button">STOP RECORDING</button>';
+    }
+    ?>
 </div>
 
 <script src="https://cdn.WebRTC-Experiment.com/RecordRTC.js"></script>
@@ -144,8 +144,8 @@ else echo '<h3>'.get_string('audioonly', 'mod_wrtcvr').'</h3>';
 
 <?php
 if($previousvideo) echo '<script>video.src = "'.$previousvideofileurl.'";</script>';
-$form->display();
+if($wrtcvr->duedate > time()) $form->display();
 
 // Finish the page.
 echo $OUTPUT->footer();
- ?>
+?>

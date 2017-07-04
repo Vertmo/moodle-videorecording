@@ -54,8 +54,8 @@ class mod_wrtcvr_mod_form extends moodleform_mod {
 
         // Adding the rest of wrtcvr settings, spreading all them into this fieldset
         // ... or adding more fieldsets ('header' elements) if needed for better logic.
-        $mform->addElement('date_selector', 'allowsubmissionsfromdate', get_string('allowsubmissionsfromdate', 'mod_wrtcvr'));
-        $mform->addElement('date_selector', 'duedate', get_string('duedate', 'mod_wrtcvr'));
+        $mform->addElement('date_time_selector', 'allowsubmissionsfromdate', get_string('allowsubmissionsfromdate', 'mod_wrtcvr'));
+        $mform->addElement('date_time_selector', 'duedate', get_string('duedate', 'mod_wrtcvr'));
 
         $radioarray=array();
         $radioarray[] = $mform->createElement('radio', 'withvideo', '', get_string('yes'), 1);

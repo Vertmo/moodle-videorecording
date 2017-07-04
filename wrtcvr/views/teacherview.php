@@ -37,8 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 } else {
     echo $OUTPUT->header();
 
-    echo '<link rel="stylesheet" type="text/css" href="style.css">';
-
     echo '<div id="webrtcwindow">';
     if($wrtcvr->withvideo) echo '<video id="video" width="640" height="360" controls>Votre navigateur ne supporte pas la video</video>';
     else echo '<audio id="video" controls>Votre navigateur ne supporte pas la video</audio>';

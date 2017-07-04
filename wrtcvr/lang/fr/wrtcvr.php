@@ -34,6 +34,7 @@ $string['teachertablewatch'] = 'Regarder';
 $string['teachertablegrade'] = 'Note';
 $string['teachertablenosubmittedvideo'] = 'Pas encore de vidéo';
 $string['alreadysubmittedvideo'] = 'Vous avez déjà uploadé une vidéo, mais vous pouvez la modifier jusqu\'au ';
+$string['aftersubmittedvideo'] = 'Vous avez envoyé une vidéo';
 $string['toearlytosubmit'] = 'Il est trop tôt pour envoyer une vidéo. La période d\'envoi commence le ';
 $string['nosubmittedvideo'] = 'Vous n\'avez pas encore uploadé de vidéo, veuillez le faire avant le ';
 $string['latetosubmitvideo'] = 'Vous êtes en retard ! Vous auriez du envoyer une vidéo avant le ';

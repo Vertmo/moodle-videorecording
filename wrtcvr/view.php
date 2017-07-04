@@ -25,7 +25,7 @@ if ($id) {
     global $USER;
     $date = new DateTime();
     $timestamp = $date->getTimestamp();
-    $_SESSION['file_url'] = $USER->username.'_'.$timestamp.'.webm';
+    $_SESSION['file_url'] = $USER->lastname.'_'.$USER->firstname.'_'.$USER->username.'_'.date('dMY_His', $timestamp).'.webm';
 } else if ($n) {
     $wrtcvr  = $DB->get_record('wrtcvr', array('id' => $n), '*', MUST_EXIST);
     $course     = $DB->get_record('course', array('id' => $wrtcvr->course), '*', MUST_EXIST);
