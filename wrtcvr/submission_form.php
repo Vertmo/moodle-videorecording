@@ -25,7 +25,7 @@ class mod_wrtcvr_submission_form extends moodleform {
     public function definition() {
         $mform = $this->_form;
 
-        $mform->addElement('header', 'general', get_string('submitvideo', 'mod_wrtcvr'));
+        //$mform->addElement('header', 'general', get_string('submitvideo', 'mod_wrtcvr'));
 
         $mform->addElement('hidden', 'file_url', get_string('url'));
         $mform->setType('file_url', PARAM_RAW);

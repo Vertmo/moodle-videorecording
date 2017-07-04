@@ -45,7 +45,7 @@ else echo '<h3>'.get_string('audioonly', 'mod_wrtcvr').'</h3>';
 echo '<br/>';
 ?>
 
-<div id="webrtcwindow" style="text-align: center;">
+<div id="webrtcwindow">
     <?php
         if($wrtcvr->duedate > time()) echo '<button id="btnRecord" class="btn btn-secondary" type="button">Start Recording</button><br/>';
 
@@ -123,6 +123,14 @@ echo '<br/>';
 
                 function xhr(url, data, callback) {
                     var request = new XMLHttpRequest();
+
+                    request.addEventListener("progress", function(oEvent) {
+                        if (oEvent.lengthComputable) {
+                            var percentComplete = oEvent.loaded / oEvent.total * 100;
+                            btnRecord.innerHTML = 'Uploading to Server... Progress : ' + percentComplete.toString();
+                        }
+                    }, false);
+
                     request.onreadystatechange = function () {
                         if (request.readyState == 4 && request.status == 200) {
                             callback(request.responseText);
@@ -132,7 +140,7 @@ echo '<br/>';
                     request.send(data);
                 }
 
-                btnRecord.innerHTML = 'Uploading to Server... Please Wait';
+                btnRecord.innerHTML = 'Uploading to Server';
                 btnRecord.disabled = true;
 
                 xhr('save.php', formData, function (fName) {
