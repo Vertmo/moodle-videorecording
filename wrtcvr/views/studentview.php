@@ -45,18 +45,14 @@ else echo '<h3>'.get_string('audioonly', 'mod_wrtcvr').'</h3>';
 echo '<br/>';
 ?>
 
-<div id="webrtcwindow">
+<div id="webrtcwindow" style="text-align: center;">
     <?php
+        if($wrtcvr->duedate > time()) echo '<button id="btnRecord" class="btn btn-secondary" type="button">Start Recording</button><br/>';
+
         if($wrtcvr->withvideo) echo '<video id="video" width="640" height="360" controls>Votre navigateur ne supporte pas la video</video>';
         else echo '<audio id="video" controls>Votre navigateur ne supporte pas la video</audio>';
     ?>
     <br/>
-    <?php
-    if($wrtcvr->duedate > time()) {
-        echo '<button id="btnStart" class="btn btn-secondary" type="button">START RECORDING</button>';
-        echo '<button id="btnStop" class="btn btn-secondary" type="button">STOP RECORDING</button>';
-    }
-    ?>
 </div>
 
 <script src="https://cdn.WebRTC-Experiment.com/RecordRTC.js"></script>
@@ -66,12 +62,12 @@ echo '<br/>';
     var webrtcwindow = document.getElementById("webrtcwindow");
     video = document.getElementById("video");
 
-    var btnStart = document.getElementById("btnStart");
-    var btnStop = document.getElementById("btnStop");
+    var btnRecord = document.getElementById("btnRecord");
 
     var recordRTC;
 
     function successCallback(stream) {
+        btnRecord.innerHTML = "Stop Recording";
         video.src = window.URL.createObjectURL(stream);
         video.play();
         <?php
@@ -97,49 +93,55 @@ echo '<br/>';
         window.alert("Le navigateur n'a pas pu détecter le bon périphérique d'enregistrement");
     }
 
-    btnStart.onclick = function() {
-        var mediaContraints;
-        <?php
-            if($wrtcvr->withvideo) echo 'var mediaConstraints = {
-                audio: true,
-                video: {
-                    width: {exact: 640},
-                    height: {exact: 360}
-                }
-            };';
-            else echo 'var mediaConstraints = {
-                audio: true,
-                video: false
-            };';
-        ?>
-        navigator.mediaDevices.getUserMedia(mediaConstraints).then(successCallback).catch(errorCallback);
-    }
-
-    btnStop.onclick = function() {
-        recordRTC.stopRecording(function(videoURL) {
-            video.src = videoURL;
-            var blob = recordRTC.getBlob();
-
-            var fileType = 'video';
-
-            var formData = new FormData();
-            formData.append(fileType + '-filename', fileName);
-            formData.append(fileType + '-blob', blob);
-
-            xhr('save.php', formData, function (fName) {});
-
-            function xhr(url, data, callback) {
-                var request = new XMLHttpRequest();
-                request.onreadystatechange = function () {
-                    if (request.readyState == 4 && request.status == 200) {
-                        callback(request.responseText);
+    btnRecord.onclick = function() {
+        if(btnRecord.innerHTML==='Start Recording') {
+            var mediaContraints;
+            <?php
+                if($wrtcvr->withvideo) echo 'var mediaConstraints = {
+                    audio: true,
+                    video: {
+                        width: {exact: 640},
+                        height: {exact: 360}
                     }
-                };
-                request.open('POST', url);
-                request.send(data);
-            }
-        });
-    };
+                };';
+                else echo 'var mediaConstraints = {
+                    audio: true,
+                    video: false
+                };';
+            ?>
+            navigator.mediaDevices.getUserMedia(mediaConstraints).then(successCallback).catch(errorCallback);
+        } else {
+            recordRTC.stopRecording(function(videoURL) {
+                video.src = videoURL;
+                var blob = recordRTC.getBlob();
+
+                var fileType = 'video';
+
+                var formData = new FormData();
+                formData.append(fileType + '-filename', fileName);
+                formData.append(fileType + '-blob', blob);
+
+                function xhr(url, data, callback) {
+                    var request = new XMLHttpRequest();
+                    request.onreadystatechange = function () {
+                        if (request.readyState == 4 && request.status == 200) {
+                            callback(request.responseText);
+                        }
+                    };
+                    request.open('POST', url);
+                    request.send(data);
+                }
+
+                btnRecord.innerHTML = 'Uploading to Server... Please Wait';
+                btnRecord.disabled = true;
+
+                xhr('save.php', formData, function (fName) {
+                    btnRecord.innerHTML = 'Start Recording';
+                    btnRecord.disabled = false;
+                });
+            });
+        }
+    }
 </script>
 
 <?php
