@@ -47,8 +47,10 @@ $capabilities = array(
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => array(
-            'guest' => CAP_ALLOW,
-            'user' => CAP_ALLOW,
+            'student' => CAP_ALLOW,
+            'teacher' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW
         )
     ),
 
@@ -93,7 +95,7 @@ $capabilities = array(
         'clonepermissionsfrom' => 'moodle/grade:manage'
     ),
 
-    'mod/wrtvcr:managegrades' => array(
+    'mod/wrtcvr:managegrades' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => array(

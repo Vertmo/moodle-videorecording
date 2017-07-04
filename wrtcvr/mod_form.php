@@ -57,11 +57,18 @@ class mod_wrtcvr_mod_form extends moodleform_mod {
         $mform->addElement('date_time_selector', 'allowsubmissionsfromdate', get_string('allowsubmissionsfromdate', 'mod_wrtcvr'));
         $mform->addElement('date_time_selector', 'duedate', get_string('duedate', 'mod_wrtcvr'));
 
-        $radioarray=array();
-        $radioarray[] = $mform->createElement('radio', 'withvideo', '', get_string('yes'), 1);
-        $radioarray[] = $mform->createElement('radio', 'withvideo', '', get_string('no'), 0);
+        /*$radioarray=array();
+        $radioarray[] = $mform->createElement('radio', 'withvideo', '', get_string('audioandvideo', 'mod_wrtcvr'), 1);
+        $radioarray[] = $mform->createElement('radio', 'withvideo', '', get_string('audioonly', 'mod_wrtcvr'), 0);
         $mform->setDefault('withvideo', 1);
-        $mform->addGroup($radioarray, 'withvideoarray', get_string('withvideo', 'mod_wrtcvr'), array(' '), false);
+        $mform->addGroup($radioarray, 'withvideoarray', get_string('withvideo', 'mod_wrtcvr'), array(' '), false);*/
+
+        $options = array(
+            1 => get_string('audioandvideo', 'mod_wrtcvr'),
+            0 => get_string('audioonly', 'mod_wrtcvr')
+        );
+        $mform->addElement('select', 'withvideo', get_string('withvideo', 'mod_wrtcvr'), $options);
+        $mform->setDefault('withvideo', 1);
 
         // Add standard grading elements.
         $this->standard_grading_coursemodule_elements();

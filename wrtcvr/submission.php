@@ -10,9 +10,10 @@ require_once(dirname(__FILE__).'/submission_form.php');
 $form = new mod_wrtcvr_submission_form();
 
 if($form->is_cancelled()) {
-    $data = $form->get_data();
-    if(file_exists($file)) {
-        unlink($file);
+    $filepath = $CFG->tempdir.'/';
+    $fileurl = $filepath.$_SESSION['file_url'];
+    if(file_exists($fileurl)) {
+        unlink($fileurl);
     }
     global $PAGE;
     $urltogo = new moodle_url('/course/view.php', array('id'=>$PAGE->course->id));
