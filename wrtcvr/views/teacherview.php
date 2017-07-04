@@ -5,6 +5,9 @@
  * @package    mod_wrtcvr
  * @copyright  2017 UPMC
  */
+
+defined('MOODLE_INTERNAL') || die();
+
 require_once(dirname(dirname(dirname(dirname(__FILE__)))).'/lib/gradelib.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -34,7 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 } else {
     echo $OUTPUT->header();
 
-    echo '<video id="video" width="640" height="360" controls>Votre navigateur ne supporte pas la video</video>';
+    echo '<link rel="stylesheet" type="text/css" href="style.css">';
+
+    echo '<div id="webrtcwindow">';
+    if($wrtcvr->withvideo) echo '<video id="video" width="640" height="360" controls>Votre navigateur ne supporte pas la video</video>';
+    else echo '<audio id="video" controls>Votre navigateur ne supporte pas la video</audio>';
+    echo '</div>';
     echo '<script>function setVideoSrc(videoURL) {
             var video = document.getElementById("video");
             video.src = videoURL;
@@ -56,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if($submission) {
             $file = $DB->get_record('files', array('id'=>$submission->fileid));
-            $date = date('m/d/Y H:i:s', $file->timemodified);
+            $date = date('d/m/Y H:i:s', $file->timemodified);
             $fileurl = moodle_url::make_pluginfile_url($file->contextid, $file->component, $file->filearea, $file->itemid, $file->filepath, $file->filename);
             $button = '<input type="button" class="btn btn-secondary" value="'.get_string('teachertablewatch', 'mod_wrtcvr').'" onclick="setVideoSrc(\''.$fileurl.'\')">';
 

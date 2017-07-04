@@ -39,3 +39,6 @@ $string['nosubmittedvideo'] = 'Vous n\'avez pas encore uploadé de vidéo, veuil
 $string['latetosubmitvideo'] = 'Vous êtes en retard ! Vous auriez du envoyer une vidéo avant le ';
 $string['allowsubmissionsfromdate'] = 'Date à laquelle les élèves peuvent commencer à envoyer des vidéos';
 $string['duedate'] = 'Date limite pour envoyer une vidéo';
+$string['withvideo'] = 'L\'élève peut il envoyer une vidéo ?';
+$string['audioandvideo'] = 'Enregistrement Audio et Vidéo';
+$string['audioonly'] = 'Enregistrement Audio seul';
