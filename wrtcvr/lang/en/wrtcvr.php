@@ -42,3 +42,4 @@ $string['duedate'] = 'The limit date to submit a video';
 $string['withvideo'] = 'Can the student submit video ?';
 $string['audioandvideo'] = 'Audio and Video recording';
 $string['audioonly'] = 'Audio recording only';
+$string['download_previous'] = 'Download previous Recording';

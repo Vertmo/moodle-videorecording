@@ -42,3 +42,4 @@ $string['duedate'] = 'Date limite pour envoyer une vidéo';
 $string['withvideo'] = 'L\'élève peut il envoyer une vidéo ?';
 $string['audioandvideo'] = 'Enregistrement Audio et Vidéo';
 $string['audioonly'] = 'Enregistrement Audio seul';
+$string['download_previous'] = 'Télécharger l\'enregistrement précédent';

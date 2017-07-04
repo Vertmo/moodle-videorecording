@@ -29,7 +29,12 @@ if ($wrtcvr->intro) {
 
 echo $OUTPUT->heading(get_string('modulename', 'wrtcvr'));
 
-if($previousvideo) echo '<p class = "alert alert-info alert-block">'.get_string('alreadysubmittedvideo', 'mod_wrtcvr').date('d.m.y', $wrtcvr->duedate).'</p>';
+if($previousvideo) {
+    $previousvideofile = $DB->get_record('files', array('id'=>$previousvideo->fileid));
+    $previousvideofileurl = moodle_url::make_pluginfile_url($previousvideofile->contextid, $previousvideofile->component, $previousvideofile->filearea, $previousvideofile->itemid, $previousvideofile->filepath, $previousvideofile->filename);
+    echo '<p class = "alert alert-info alert-block">'.get_string('alreadysubmittedvideo', 'mod_wrtcvr').date('d.m.y', $wrtcvr->duedate).'</p>';
+    echo '<a class="btn btn-secondary" href="'.$previousvideofileurl.'">'.get_string('download_previous', 'mod_wrtcvr').'</a>';
+}
 else {
     if($wrtcvr->duedate > time()) {
         echo '<p class = "alert alert-info alert-block">'.get_string('nosubmittedvideo', 'mod_wrtcvr').date('d.m.y', $wrtcvr->duedate).'</p>';
@@ -38,9 +43,10 @@ else {
 }
 
 echo '<script>fileName="'.$_SESSION['file_url'].'"</script>';
+echo '<br/><br/>';
 
-if($wrtcvr->withvideo) echo '<p>'.get_string('audioandvideo', 'mod_wrtcvr').'</p>';
-else echo '<p>'.get_string('audioonly', 'mod_wrtcvr').'</p>';
+if($wrtcvr->withvideo) echo '<h3>'.get_string('audioandvideo', 'mod_wrtcvr').'</h3>';
+else echo '<h3>'.get_string('audioonly', 'mod_wrtcvr').'</h3>';
 ?>
 
 <div id="webrtcwindow">
@@ -80,7 +86,7 @@ else echo '<p>'.get_string('audioonly', 'mod_wrtcvr').'</p>';
             };';
             else echo 'var options = {
                 type: "audio",
-                recorderType: StereoAudioRecorder
+                audioBitsPerSecond: 128000
             };';
         ?>
         recordRTC = RecordRTC(stream, options);
@@ -137,11 +143,7 @@ else echo '<p>'.get_string('audioonly', 'mod_wrtcvr').'</p>';
 </script>
 
 <?php
-if($previousvideo) {
-    $previousvideofile = $DB->get_record('files', array('id'=>$previousvideo->fileid));
-    $previousvideofileurl = moodle_url::make_pluginfile_url($previousvideofile->contextid, $previousvideofile->component, $previousvideofile->filearea, $previousvideofile->itemid, $previousvideofile->filepath, $previousvideofile->filename);
-    echo '<script>video.src = "'.$previousvideofileurl.'";</script>';
-}
+if($previousvideo) echo '<script>video.src = "'.$previousvideofileurl.'";</script>';
 $form->display();
 
 // Finish the page.

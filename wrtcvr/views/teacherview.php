@@ -52,13 +52,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $userids = array_map(function($obj) {return $obj->id;}, $enrolledusers);
     $gradeinfo = grade_get_grades($course->id, 'mod', 'wrtcvr', $wrtcvr->id, $userids);
     $table = new html_table();
-    if($gradeinfo->items) $table->head = array(get_string('teachertableauthor', 'mod_wrtcvr'), get_string('teachertabledate', 'mod_wrtcvr'), get_string('teachertablewatch', 'mod_wrtcvr'), get_string('teachertablegrade', 'mod_wrtcvr').' (/'.intval($gradeinfo->items[0]->grademax).')');
-    else $table->head = array(get_string('teachertableauthor', 'mod_wrtcvr'), get_string('teachertabledate', 'mod_wrtcvr'), get_string('teachertablewatch', 'mod_wrtcvr'));
+    if($gradeinfo->items) $table->head = array(get_string('teachertableauthor', 'mod_wrtcvr'), get_string('teachertabledate', 'mod_wrtcvr'), get_string('teachertablewatch', 'mod_wrtcvr'), get_string('download'), get_string('teachertablegrade', 'mod_wrtcvr').' (/'.intval($gradeinfo->items[0]->grademax).')');
+    else $table->head = array(get_string('teachertableauthor', 'mod_wrtcvr'), get_string('teachertabledate', 'mod_wrtcvr'), get_string('teachertablewatch', 'mod_wrtcvr'), get_string('download'));
     echo '<form action="#" method="post">';
 
     foreach($enrolledusers as $user) {
         $date = get_string('teachertablenosubmittedvideo', 'mod_wrtcvr');
-        $button = get_string('teachertablenosubmittedvideo', 'mod_wrtcvr');
+        $button_watch = get_string('teachertablenosubmittedvideo', 'mod_wrtcvr');
+        $button_download = get_string('teachertablenosubmittedvideo', 'mod_wrtcvr');
         $grade = get_string('teachertablenosubmittedvideo', 'mod_wrtcvr');
         $submission = $DB->get_record('wrtcvr_submissions', array('assignment'=>$wrtcvr->id, 'userid'=>$user->id));
 
@@ -66,15 +67,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $file = $DB->get_record('files', array('id'=>$submission->fileid));
             $date = date('d/m/Y H:i:s', $file->timemodified);
             $fileurl = moodle_url::make_pluginfile_url($file->contextid, $file->component, $file->filearea, $file->itemid, $file->filepath, $file->filename);
-            $button = '<input type="button" class="btn btn-secondary" value="'.get_string('teachertablewatch', 'mod_wrtcvr').'" onclick="setVideoSrc(\''.$fileurl.'\')">';
+            $button_watch = '<input type="button" class="btn btn-secondary" value="'.get_string('teachertablewatch', 'mod_wrtcvr').'" onclick="setVideoSrc(\''.$fileurl.'\')">';
+            $button_download = '<a class="btn btn-secondary" href="'.$fileurl.'">'.get_string('download').'</a>';
 
             if($gradeinfo->items) {
                 if($currentgrade = $gradeinfo->items[0]->grades[$user->id]->grade) $grade = '<input type="number" name="grade_'.$user->id.'" value="'.$currentgrade.'" min="0" max="'.intval($gradeinfo->items[0]->grademax).'">';
                 else $grade = '<input type="number" name="grade_'.$user->id.'" value="0" min="0" max="'.intval($gradeinfo->items[0]->grademax).'">';
             }
         }
-        if($gradeinfo->items) $table->data[] = array($user->firstname.' '.$user->lastname, $date, $button, $grade);
-        else $table->data[] = array($user->firstname.' '.$user->lastname, $date, $button);
+        if($gradeinfo->items) $table->data[] = array($user->firstname.' '.$user->lastname, $date, $button_watch, $button_download, $grade);
+        else $table->data[] = array($user->firstname.' '.$user->lastname, $date, $button_watch, $button_download);
     }
     echo html_writer::table($table);
     if($gradeinfo->items) echo '<input id="id_submitbutton" type="submit" class="btn btn-primary" value="'.get_string('updategrades', 'mod_wrtcvr').'"/>';
