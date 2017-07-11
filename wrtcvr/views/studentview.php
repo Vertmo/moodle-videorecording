@@ -49,8 +49,8 @@ echo '<br/>';
     <?php
         if($wrtcvr->duedate > time()) echo '<button id="btnRecord" class="btn btn-secondary" type="button">Start Recording</button><br/>';
 
-        if($wrtcvr->withvideo) echo '<video id="video" width="640" height="360" controls>Votre navigateur ne supporte pas la video</video>';
-        else echo '<audio id="video" controls>Votre navigateur ne supporte pas la video</audio>';
+        if($wrtcvr->withvideo) echo '<video id="video" width="640" height="360" style="display:none" controls>Votre navigateur ne supporte pas la video</video>';
+        else echo '<audio id="video" style="display:none" controls>Votre navigateur ne supporte pas la video</audio>';
     ?>
     <br/>
 </div>
@@ -94,6 +94,7 @@ echo '<br/>';
     }
 
     btnRecord.onclick = function() {
+        video.style.display = "block";
         if(btnRecord.innerHTML==='Start Recording') {
             var mediaContraints;
             <?php
@@ -153,7 +154,7 @@ echo '<br/>';
 </script>
 
 <?php
-if($previousvideo) echo '<script>video.src = "'.$previousvideofileurl.'";</script>';
+if($previousvideo) echo '<script>video.src = "'.$previousvideofileurl.'"; video.style.display="block"</script>';
 if($wrtcvr->duedate > time()) $form->display();
 
 // Finish the page.
