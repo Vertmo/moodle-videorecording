@@ -56,6 +56,7 @@ class mod_wrtcvr_mod_form extends moodleform_mod {
         // ... or adding more fieldsets ('header' elements) if needed for better logic.
         $mform->addElement('date_time_selector', 'allowsubmissionsfromdate', get_string('allowsubmissionsfromdate', 'mod_wrtcvr'));
         $mform->addElement('date_time_selector', 'duedate', get_string('duedate', 'mod_wrtcvr'));
+        $mform->setDefault('duedate', time()+7*24*3600);
 
         /*$radioarray=array();
         $radioarray[] = $mform->createElement('radio', 'withvideo', '', get_string('audioandvideo', 'mod_wrtcvr'), 1);

@@ -37,13 +37,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 } else {
     echo $OUTPUT->header();
 
+    echo '<a href="#video"></a>';
     echo '<div id="webrtcwindow">';
-    if($wrtcvr->withvideo) echo '<video id="video" width="640" height="360" controls>Votre navigateur ne supporte pas la video</video>';
-    else echo '<audio id="video" controls>Votre navigateur ne supporte pas la video</audio>';
+    if($wrtcvr->withvideo) echo '<video id="video" style="display:none" controls>Votre navigateur ne supporte pas la video</video>';
+    else echo '<audio id="video" style="display:none" controls>Votre navigateur ne supporte pas la video</audio>';
     echo '</div>';
     echo '<script>function setVideoSrc(videoURL) {
             var video = document.getElementById("video");
             video.src = videoURL;
+            video.style.display = "block";
+            location.hash = "#video";
+            video.play();
         }</script>';
 
     $enrolledusers = get_enrolled_users($context);
@@ -55,6 +59,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     echo '<form action="#" method="post">';
 
     foreach($enrolledusers as $user) {
+        $sql = "
+            SELECT *
+            FROM
+                {role} r,
+                {role_assignments} ra
+            WHERE
+                ra.userid = ? AND
+                ra.roleid = r.id AND
+                r.shortname = 'student'
+        ";
+        if(!$DB->get_records_sql($sql, array($user->id))) continue;
         $date = get_string('teachertablenosubmittedvideo', 'mod_wrtcvr');
         $button_watch = get_string('teachertablenosubmittedvideo', 'mod_wrtcvr');
         $button_download = get_string('teachertablenosubmittedvideo', 'mod_wrtcvr');
