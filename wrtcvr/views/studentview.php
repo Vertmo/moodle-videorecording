@@ -72,7 +72,7 @@ echo '<br/>';
         video.play();
         <?php
             if($wrtcvr->withvideo) echo 'var options = {
-                mimeType: "video/webm\;codecs=h264",
+                mimeType: "video/webm",
                 audioBitsPerSecond: 128000,
                 videoBitsPerSecond: 128000,
                 video: {
