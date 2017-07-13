@@ -42,6 +42,17 @@ $context = context_module::instance($cm->id);
 require_login($course, true, $cm);
 require_capability('mod/wrtcvr:view', $context);
 
+$params = array(
+    'context' => $context,
+    'objectid' => $wrtcvr->id
+);
+
+$event = \mod_wrtcvr\event\course_module_viewed::create($params);
+$event->add_record_snapshot('course_modules', $cm);
+$event->add_record_snapshot('course', $course);
+$event->add_record_snapshot('wrtcvr', $wrtcvr);
+$event->trigger();
+
 // Print the page header.
 $PAGE->set_url('/mod/wrtcvr/view.php', array('id' => $cm->id));
 $PAGE->set_title(format_string($wrtcvr->name));
